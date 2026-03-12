@@ -1,4 +1,4 @@
-package com.example.translator.bd.entity.enums;
+package com.example.translator.db.entity.enums;
 
 public enum LanguagesEnum {
     SPANISH,

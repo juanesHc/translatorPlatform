@@ -11,10 +11,13 @@ public class GroqConfig {
     @Value("${groq.api.key}")
     private String apiKey;
 
+    @Value("${groq.base.url}")
+    private String baseApiKey;
+
     @Bean
     public WebClient groqWebClient() {
         return WebClient.builder()
-                .baseUrl("https://api.groq.com/openai/v1")
+                .baseUrl(baseApiKey)
                 .defaultHeader("Authorization", "Bearer " + apiKey)
                 .defaultHeader("Content-Type", "application/json")
                 .build();

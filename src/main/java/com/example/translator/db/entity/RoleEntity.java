@@ -1,6 +1,6 @@
-package com.example.translator.bd.entity;
+package com.example.translator.db.entity;
 
-import com.example.translator.bd.entity.enums.PersonRoleEnum;
+import com.example.translator.db.entity.enums.PersonRoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

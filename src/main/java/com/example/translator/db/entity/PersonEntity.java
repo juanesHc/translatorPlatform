@@ -1,4 +1,4 @@
-package com.example.translator.bd.entity;
+package com.example.translator.db.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,10 +25,13 @@ public class PersonEntity extends BaseEntity{
     @Column(nullable = false)
     private String familyName;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TranslationEntity> translations;
+    @Column(nullable = false)
+    private Integer credits;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DocumentEntity> documentEntities;
 }

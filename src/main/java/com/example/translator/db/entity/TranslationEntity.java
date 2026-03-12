@@ -1,6 +1,7 @@
-package com.example.translator.bd.entity;
+package com.example.translator.db.entity;
 
-import com.example.translator.bd.entity.enums.LanguagesEnum;
+import com.example.translator.db.entity.enums.LanguagesEnum;
+import com.example.translator.db.entity.enums.TranslationStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,15 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TranslationEntity extends BaseEntity {
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String originalText;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String translatedText;
-
-    @Column(nullable = false)
-    private String fileName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -32,9 +26,13 @@ public class TranslationEntity extends BaseEntity {
     @Column(nullable = false)
     private LanguagesEnum targetLanguage;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TranslationStatusEnum status;
+
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
-    private PersonEntity person;
+    @JoinColumn(name = "document_id", nullable = false)
+    private DocumentEntity document;
 
 
 }
