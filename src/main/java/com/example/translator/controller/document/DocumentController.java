@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class DocumentController {
 
-    private DocumentService documentService;
-
-
+    private final DocumentService documentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/load/{personId}")
     public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId, @RequestParam("file") MultipartFile file){

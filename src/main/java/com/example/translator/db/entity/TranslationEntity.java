@@ -31,7 +31,7 @@ public class TranslationEntity extends BaseEntity {
     private TranslationStatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "document_id", nullable = false)
+    @JoinColumn(name = "document_id")
     private DocumentEntity document;
 
 

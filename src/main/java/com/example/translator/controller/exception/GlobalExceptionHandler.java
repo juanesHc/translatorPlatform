@@ -1,6 +1,8 @@
 package com.example.translator.controller.exception;
 
 import com.example.translator.dto.exception.ExceptionDto;
+import com.example.translator.exceptions.DocumentProcessingException;
+import com.example.translator.exceptions.PersonNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,19 +12,32 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Archivo muy grande (Spring lo lanza solo)
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ExceptionDto> handleFileSize(
             MaxUploadSizeExceededException ex) {
         return ResponseEntity
                 .status(HttpStatus.PAYLOAD_TOO_LARGE)
-                .body(new ExceptionDto("El archivo excede el tamaño permitido", "FILE_TOO_LARGE"));
+                .body(new ExceptionDto("the file is too large", "FILE_TOO_LARGE"));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleGeneric(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ExceptionDto("Error inesperado", "INTERNAL_ERROR"));
+                .body(new ExceptionDto("Unexpected Error", "INTERNAL_ERROR"));
+    }
+
+    @ExceptionHandler(DocumentProcessingException.class)
+    public ResponseEntity<ExceptionDto> handleDocumentProcessing(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionDto("It was impossible to process the document", "DOCUMENT_PROCESSING_ERROR"));
+    }
+
+    @ExceptionHandler(PersonNotFoundException.class)
+    public ResponseEntity<ExceptionDto> handleFindingPerson(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionDto("It was impossible to found the according person", "PERSON_NOT_FOUND"));
     }
 }

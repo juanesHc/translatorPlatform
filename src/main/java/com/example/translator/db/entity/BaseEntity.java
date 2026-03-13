@@ -15,10 +15,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Id
@@ -26,12 +24,17 @@ public abstract class BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID id;
 
-    @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+
+    public BaseEntity() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }
 
