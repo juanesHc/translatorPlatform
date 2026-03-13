@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class RetrieveDocumentService {
+public class RetrieveAllDocumentService {
 
     private final DocumentRepository documentRepository;
     private final DocumentMapper documentMapper;

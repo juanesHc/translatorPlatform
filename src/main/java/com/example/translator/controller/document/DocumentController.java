@@ -1,9 +1,11 @@
 package com.example.translator.controller.document;
 
+import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsResponseDto;
+import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
-import com.example.translator.services.document.RetrieveDocumentService;
+import com.example.translator.services.document.RetrieveAllDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,8 @@ import java.util.List;
 public class DocumentController {
 
     private final RegisterDocumentService registerDocumentService;
-    private final RetrieveDocumentService retrieveDocumentService;
+    private final RetrieveAllDocumentService retrieveAllDocumentService;
+    private final DeleteDocumentService deleteDocumentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/load/{personId}")
     public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId, @RequestParam("file") MultipartFile file){
@@ -29,12 +32,19 @@ public class DocumentController {
     }
 
     @GetMapping("/retrieve/{personId}")
-    public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOrignalDocuments(@PathVariable String personId){
+    public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOriginalDocuments(@PathVariable String personId){
 
-        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto=retrieveDocumentService.retrieveMyDocuments(personId);
+        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto= retrieveAllDocumentService.retrieveMyDocuments(personId);
 
         return ResponseEntity.ok(retrieveDocumentsResponseDto);
     }
+
+    @DeleteMapping("/delete/{documentId}")
+    public ResponseEntity<DeleteDocumentResponseDto> deleteOriginalDocument(@PathVariable String documentId){
+        return ResponseEntity.ok(deleteDocumentService.deleteDocument(documentId));
+    }
+
+
 
 
 }
