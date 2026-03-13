@@ -5,6 +5,7 @@ import com.example.translator.db.entity.PersonEntity;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.exceptions.DocumentProcessingException;
 import com.example.translator.exceptions.PersonNotFoundException;
+import com.example.translator.mapper.document.DocumentMapper;
 import com.example.translator.repository.DocumentRepository;
 import com.example.translator.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class DocumentService {
+public class RegisterDocumentService {
 
     private final PersonRepository personRepository;
     private final Tika tika;
     private final DocumentRepository documentRepository;
+    private final DocumentMapper documentMapper;
 
     public LoadDocumentResponseDto registerDocument(MultipartFile file,String personId){
         PersonEntity personEntity = personRepository.findById(UUID.fromString(personId))
@@ -63,12 +65,7 @@ public class DocumentService {
         document.setContentBase64(base64);
         document.setPerson(personEntity);
         DocumentEntity documentSaved = documentRepository.save(document);
-
-        LoadDocumentResponseDto loadDocumentResponseDto=new LoadDocumentResponseDto();
-        loadDocumentResponseDto.setDocumentId(String.valueOf(documentSaved.getId()));
-        loadDocumentResponseDto.setDocumentName(documentSaved.getFileName());
-
-        return loadDocumentResponseDto;
+        return documentMapper.DocumentEntityToLoadDocumentResponseDto(documentSaved);
     }
 
 
@@ -79,4 +76,6 @@ public class DocumentService {
                 "text/plain"
         ).contains(mimeType);
     }
+
+
 }
