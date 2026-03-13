@@ -1,4 +1,4 @@
-package com.example.translator.exception;
+package com.example.translator.exceptions;
 
 public class TranslationLimitException extends RuntimeException {
     public TranslationLimitException(String message) {

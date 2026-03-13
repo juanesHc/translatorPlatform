@@ -26,7 +26,7 @@ public class PersonEntity extends BaseEntity{
     private String familyName;
 
     @Column(nullable = false)
-    private Integer credits;
+    private int credits;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

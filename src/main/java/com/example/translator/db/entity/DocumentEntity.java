@@ -1,11 +1,15 @@
 package com.example.translator.db.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "document")
+@Getter
+@Setter
 public class DocumentEntity extends BaseEntity {
     @Column(nullable = false)
     private String fileName;
