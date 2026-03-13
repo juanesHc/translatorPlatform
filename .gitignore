@@ -35,3 +35,15 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Env
+.env
+*.env
+
+# IDE
+.idea/
+*.iml
+
+# Build
+build/
+*.jar
