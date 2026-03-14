@@ -1,11 +1,13 @@
 package com.example.translator.controller.document;
 
+import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
+import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsResponseDto;
 import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
-import com.example.translator.services.document.RetrieveAllDocumentService;
+import com.example.translator.services.document.RetrieveDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import java.util.List;
 public class DocumentController {
 
     private final RegisterDocumentService registerDocumentService;
-    private final RetrieveAllDocumentService retrieveAllDocumentService;
+    private final RetrieveDocumentService retrieveDocumentService;
     private final DeleteDocumentService deleteDocumentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/load/{personId}")
@@ -31,12 +33,20 @@ public class DocumentController {
         return ResponseEntity.ok(loadDocumentResponseDto);
     }
 
-    @GetMapping("/retrieve/{personId}")
+    @GetMapping("/retrieve/all/{personId}")
     public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOriginalDocuments(@PathVariable String personId){
 
-        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto= retrieveAllDocumentService.retrieveMyDocuments(personId);
+        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto= retrieveDocumentService.retrieveMyDocuments(personId);
 
         return ResponseEntity.ok(retrieveDocumentsResponseDto);
+    }
+
+    @GetMapping("/retrieve/{personId}")
+    public ResponseEntity<RetrieveDocumentsPageResponseDto> getDocuments(
+            @PathVariable String personId,
+            @ModelAttribute RetrieveDocumentsRequestDto requestDto) {
+
+        return ResponseEntity.ok(retrieveDocumentService.getDocumentsByPerson(personId, requestDto));
     }
 
     @DeleteMapping("/delete/{documentId}")
