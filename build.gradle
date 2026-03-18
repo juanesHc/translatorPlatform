@@ -51,6 +51,7 @@ dependencies {
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
 	implementation 'org.springframework.ai:spring-ai-tika-document-reader'
+	implementation 'com.itextpdf:itext7-core:7.2.5'
 
 	implementation 'com.notificationapi:notificationapi-java-server-sdk:0.3.0'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.14'

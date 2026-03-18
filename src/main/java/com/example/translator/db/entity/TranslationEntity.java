@@ -15,11 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TranslationEntity extends BaseEntity {
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String translatedText;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private LanguagesEnum sourceLanguage;
 
     @Enumerated(EnumType.STRING)
