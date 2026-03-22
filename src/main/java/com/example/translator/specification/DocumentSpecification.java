@@ -1,6 +1,6 @@
 package com.example.translator.specification;
 
-import com.example.translator.db.entity.DocumentEntity;
+import com.example.translator.entity.DocumentEntity;
 import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -23,9 +23,9 @@ public class DocumentSpecification {
     }
 
 
-    private static Specification<DocumentEntity> hasTitle(String title) {
+    private static Specification<DocumentEntity> hasFileName(String fileName) {
         return (root, query, cb) ->
-                cb.equal(cb.lower(root.get("fileName")), title.toLowerCase());
+                cb.like(cb.lower(root.get("fileName")), "%" + fileName.toLowerCase() + "%");
     }
 
 
@@ -45,8 +45,8 @@ public class DocumentSpecification {
 
         Specification<DocumentEntity> personEntitySpecification = Specification.allOf();
 
-        if(retrieveDocumentsRequestDto.getTitle()!=null && !retrieveDocumentsRequestDto.getTitle().isBlank()){
-            personEntitySpecification=personEntitySpecification.and(hasTitle(retrieveDocumentsRequestDto.getTitle()));
+        if(retrieveDocumentsRequestDto.getFileName()!=null && !retrieveDocumentsRequestDto.getFileName().isBlank()){
+            personEntitySpecification=personEntitySpecification.and(hasFileName(retrieveDocumentsRequestDto.getFileName()));
         }
         if(retrieveDocumentsRequestDto.getOriginalText()!=null && !retrieveDocumentsRequestDto.getOriginalText().isBlank()){
             personEntitySpecification=personEntitySpecification.and(hasOriginalText(retrieveDocumentsRequestDto.getOriginalText()));

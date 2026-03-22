@@ -1,11 +1,11 @@
 package com.example.translator.services.document;
 
-import com.example.translator.db.entity.DocumentEntity;
-import com.example.translator.db.entity.PersonEntity;
+import com.example.translator.dto.document.response.LoadDocumentResponseDto;
+import com.example.translator.entity.DocumentEntity;
+import com.example.translator.entity.PersonEntity;
 import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsResponseDto;
-import com.example.translator.exceptions.PersonNotFoundException;
 import com.example.translator.mapper.document.DocumentMapper;
 import com.example.translator.repository.DocumentRepository;
 import com.example.translator.repository.PersonRepository;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,11 +32,16 @@ public class RetrieveDocumentService {
 
     public List<RetrieveDocumentsResponseDto> retrieveMyDocuments(String personId){
 
-        List<DocumentEntity> documentEntities=documentRepository.findByPersonId(UUID.fromString(personId)).
-                orElseThrow(()->new PersonNotFoundException("Could not found the according person"));
+        List<DocumentEntity> documentEntities=documentRepository.findByPersonId(UUID.fromString(personId));
 
         return documentMapper.DocumentEntitiesToRetrieveDocumentsResponseDtos(documentEntities);
 
+    }
+
+    public List<LoadDocumentResponseDto> findDocumentForPerson(String personId) {
+        List<DocumentEntity> documents = documentRepository.findByPersonId(UUID.fromString(personId));
+
+        return documentMapper.DocumentEntitiesToLoadDocumentResponseDtos(documents);
     }
 
     public RetrieveDocumentsPageResponseDto getDocumentsByPerson(
@@ -60,6 +66,13 @@ public class RetrieveDocumentService {
                 page.getTotalPages(),
                 page.getTotalElements()
         );
+    }
+
+    public byte[] downloadDocument(String documentId) {
+        DocumentEntity document = documentRepository.findById(UUID.fromString(documentId))
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+
+        return Base64.getDecoder().decode(document.getContentBase64());
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.translator.db.entity;
+package com.example.translator.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

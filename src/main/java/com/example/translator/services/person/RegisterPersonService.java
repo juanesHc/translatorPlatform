@@ -1,11 +1,10 @@
 package com.example.translator.services.person;
 
-import com.example.translator.db.entity.PersonEntity;
-import com.example.translator.db.entity.RoleEntity;
-import com.example.translator.db.entity.enums.PersonRoleEnum;
+import com.example.translator.entity.PersonEntity;
+import com.example.translator.entity.RoleEntity;
+import com.example.translator.entity.enums.PersonRoleEnum;
 import com.example.translator.dto.person.request.RegisterPersonRequestDto;
 import com.example.translator.dto.person.response.RegisterPersonResponseDto;
-import com.example.translator.exceptions.RegisterPersonException;
 import com.example.translator.exceptions.RoleNotFoundException;
 import com.example.translator.mapper.person.PersonMapper;
 import com.example.translator.repository.PersonRepository;

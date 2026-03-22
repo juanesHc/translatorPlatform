@@ -1,7 +1,7 @@
-package com.example.translator.db.entity;
+package com.example.translator.entity;
 
-import com.example.translator.db.entity.enums.LanguagesEnum;
-import com.example.translator.db.entity.enums.TranslationStatusEnum;
+import com.example.translator.entity.enums.LanguagesEnum;
+import com.example.translator.entity.enums.TranslationStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

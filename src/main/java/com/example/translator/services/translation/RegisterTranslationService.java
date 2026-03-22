@@ -1,11 +1,11 @@
 package com.example.translator.services.translation;
 
-import com.example.translator.db.entity.DocumentEntity;
-import com.example.translator.db.entity.PersonEntity;
-import com.example.translator.db.entity.TranslationEntity;
-import com.example.translator.db.entity.enums.LanguagesEnum;
-import com.example.translator.db.entity.enums.PersonRoleEnum;
-import com.example.translator.db.entity.enums.TranslationStatusEnum;
+import com.example.translator.entity.DocumentEntity;
+import com.example.translator.entity.PersonEntity;
+import com.example.translator.entity.TranslationEntity;
+import com.example.translator.entity.enums.LanguagesEnum;
+import com.example.translator.entity.enums.PersonRoleEnum;
+import com.example.translator.entity.enums.TranslationStatusEnum;
 import com.example.translator.dto.translation.request.TranslationRequestDto;
 import com.example.translator.dto.translation.response.RegisterTranslationResponseDto;
 import com.example.translator.dto.translation.response.TranslationResponseDto;

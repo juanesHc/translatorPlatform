@@ -11,7 +11,7 @@ public class RetrieveDocumentsRequestDto {
 
     private String originalText;
     private LocalDate createdAt;
-    private String title;
+    private String fileName;
     private LocalDate targetDate;
     private LocalDate sourceDate;
 

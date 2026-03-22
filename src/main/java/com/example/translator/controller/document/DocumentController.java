@@ -9,6 +9,7 @@ import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
 import com.example.translator.services.document.RetrieveDocumentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,11 @@ public class DocumentController {
         return ResponseEntity.ok(loadDocumentResponseDto);
     }
 
+    @GetMapping("/person/{personId}/summary")
+    public ResponseEntity<List<LoadDocumentResponseDto>> getDocumentSummaries(@PathVariable String personId) {
+        return ResponseEntity.ok(retrieveDocumentService.findDocumentForPerson(personId));
+    }
+
     @GetMapping("/retrieve/all/{personId}")
     public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOriginalDocuments(@PathVariable String personId){
 
@@ -52,6 +58,17 @@ public class DocumentController {
     @DeleteMapping("/delete/{documentId}")
     public ResponseEntity<DeleteDocumentResponseDto> deleteOriginalDocument(@PathVariable String documentId){
         return ResponseEntity.ok(deleteDocumentService.deleteDocument(documentId));
+    }
+
+    @GetMapping("/{documentId}/download")
+    public ResponseEntity<byte[]> downloadDocument(@PathVariable String documentId) {
+        byte[] pdfBytes = retrieveDocumentService.downloadDocument(documentId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"original_document.pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
 
 

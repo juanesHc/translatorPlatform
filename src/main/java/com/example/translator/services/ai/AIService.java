@@ -1,6 +1,6 @@
 package com.example.translator.services.ai;
 
-import com.example.translator.db.entity.enums.LanguagesEnum;
+import com.example.translator.entity.enums.LanguagesEnum;
 import com.example.translator.dto.translation.response.TranslationResponseDto;
 import com.example.translator.exceptions.TranslationException;
 import com.fasterxml.jackson.core.JsonProcessingException;

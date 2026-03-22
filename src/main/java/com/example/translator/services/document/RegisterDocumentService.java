@@ -1,7 +1,7 @@
 package com.example.translator.services.document;
 
-import com.example.translator.db.entity.DocumentEntity;
-import com.example.translator.db.entity.PersonEntity;
+import com.example.translator.entity.DocumentEntity;
+import com.example.translator.entity.PersonEntity;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.exceptions.DocumentProcessingException;
 import com.example.translator.exceptions.PersonNotFoundException;

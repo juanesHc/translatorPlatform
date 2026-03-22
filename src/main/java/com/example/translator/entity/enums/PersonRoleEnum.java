@@ -1,4 +1,4 @@
-package com.example.translator.db.entity.enums;
+package com.example.translator.entity.enums;
 
 public enum PersonRoleEnum {
 

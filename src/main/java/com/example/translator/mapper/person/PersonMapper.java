@@ -1,6 +1,6 @@
 package com.example.translator.mapper.person;
 
-import com.example.translator.db.entity.PersonEntity;
+import com.example.translator.entity.PersonEntity;
 import com.example.translator.dto.person.request.RegisterPersonRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

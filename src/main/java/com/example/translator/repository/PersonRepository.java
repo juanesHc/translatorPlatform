@@ -1,6 +1,6 @@
 package com.example.translator.repository;
 
-import com.example.translator.db.entity.PersonEntity;
+import com.example.translator.entity.PersonEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
