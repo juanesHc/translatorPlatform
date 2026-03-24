@@ -31,8 +31,8 @@ public class DocumentSpecification {
             spec = spec.and(hasFileName(requestDto.getFileName()));
         }
 
-        if (requestDto.getSourceDate() != null && requestDto.getTargetDate() != null) {
-            spec = spec.and(createdBetween(requestDto.getSourceDate(), requestDto.getTargetDate()));
+        if (requestDto.getCreatedAt() != null && requestDto.getTargetDate() != null) {
+            spec = spec.and(createdBetween(requestDto.getCreatedAt(), requestDto.getTargetDate()));
         }
 
         else if (requestDto.getCreatedAt() != null) {

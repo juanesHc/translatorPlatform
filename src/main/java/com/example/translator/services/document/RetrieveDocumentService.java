@@ -51,12 +51,15 @@ public class RetrieveDocumentService {
         List<LoadDocumentResponseDto> content = page.getContent().stream()
                 .map(doc -> new LoadDocumentResponseDto(doc.getId().toString(), doc.getFileName()))
                 .collect(Collectors.toList());
+        long total = page.getTotalElements();
+        String message = (total == 0) ? "No hay similitudes para esta búsqueda" : "Búsqueda exitosa";
 
         return new RetrieveDocumentsPageResponseDto(
                 content,
                 page.getNumber(),
                 page.getTotalPages(),
-                page.getTotalElements()
+                total,
+                message // Lo pasas al constructor
         );
     }
 

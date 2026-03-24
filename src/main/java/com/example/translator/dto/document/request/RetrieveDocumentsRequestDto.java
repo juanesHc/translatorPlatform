@@ -2,6 +2,7 @@ package com.example.translator.dto.document.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -9,11 +10,13 @@ import java.time.LocalDate;
 @Setter
 public class RetrieveDocumentsRequestDto {
 
-    private String originalText;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate createdAt;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate targetDate;
+
     private String fileName;
-    private LocalDate targetDate=LocalDate.now();
-    private LocalDate sourceDate;
 
     private int page = 0;
     private int size = 10;

@@ -17,5 +17,7 @@ public class RetrieveDocumentsPageResponseDto {
     private int totalPages;
     private long totalElements;
 
+    private String message;
+
 
 }
