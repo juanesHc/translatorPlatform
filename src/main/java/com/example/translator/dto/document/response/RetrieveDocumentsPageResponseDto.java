@@ -12,8 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RetrieveDocumentsPageResponseDto {
-    private List<RetrieveDocumentsResponseDto> documents;
+    private List<LoadDocumentResponseDto> documents;
     private int currentPage;
     private int totalPages;
     private long totalElements;
+
+
 }

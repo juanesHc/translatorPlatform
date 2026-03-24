@@ -4,7 +4,6 @@ import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
-import com.example.translator.dto.document.response.RetrieveDocumentsResponseDto;
 import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
 import com.example.translator.services.document.RetrieveDocumentService;
@@ -37,14 +36,6 @@ public class DocumentController {
     @GetMapping("/person/{personId}/summary")
     public ResponseEntity<List<LoadDocumentResponseDto>> getDocumentSummaries(@PathVariable String personId) {
         return ResponseEntity.ok(retrieveDocumentService.findDocumentForPerson(personId));
-    }
-
-    @GetMapping("/retrieve/all/{personId}")
-    public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOriginalDocuments(@PathVariable String personId){
-
-        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto= retrieveDocumentService.retrieveMyDocuments(personId);
-
-        return ResponseEntity.ok(retrieveDocumentsResponseDto);
     }
 
     @GetMapping("/retrieve/{personId}")

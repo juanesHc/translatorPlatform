@@ -12,7 +12,7 @@ public class RetrieveDocumentsRequestDto {
     private String originalText;
     private LocalDate createdAt;
     private String fileName;
-    private LocalDate targetDate;
+    private LocalDate targetDate=LocalDate.now();
     private LocalDate sourceDate;
 
     private int page = 0;

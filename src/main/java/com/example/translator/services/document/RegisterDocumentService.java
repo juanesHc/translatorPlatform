@@ -65,7 +65,7 @@ public class RegisterDocumentService {
         document.setContentBase64(base64);
         document.setPerson(personEntity);
         DocumentEntity documentSaved = documentRepository.save(document);
-        return documentMapper.DocumentEntityToLoadDocumentResponseDto(documentSaved);
+        return documentMapper.toLoadDto(documentSaved);
     }
 
 
