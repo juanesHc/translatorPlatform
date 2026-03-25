@@ -1,5 +1,6 @@
 package com.example.translator.mapper.person;
 
+import com.example.translator.dto.person.response.RetrieveMyDataResponseDto;
 import com.example.translator.entity.PersonEntity;
 import com.example.translator.dto.person.request.RegisterPersonRequestDto;
 import org.mapstruct.Mapper;
@@ -15,5 +16,9 @@ public interface PersonMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "documentEntities", ignore = true)
     PersonEntity RegisterPersonRequestDtoToPersonEntity(RegisterPersonRequestDto dto);
+
+    @Mapping(source = "givenName", target = "firstName")
+    @Mapping(source = "familyName", target = "lastName")
+    RetrieveMyDataResponseDto toRetrieveMyDataResponseDto(PersonEntity personEntity);
 
 }
