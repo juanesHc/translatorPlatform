@@ -4,6 +4,7 @@ import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
+import com.example.translator.entity.enums.LanguagesEnum;
 import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
 import com.example.translator.services.document.RetrieveDocumentService;
@@ -26,11 +27,27 @@ public class DocumentController {
     private final DeleteDocumentService deleteDocumentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/load/{personId}")
-    public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId,
+                                                                @RequestParam("file") MultipartFile file,
+                                                                @RequestParam("targetLanguage") String targetLanguage){
 
-        LoadDocumentResponseDto loadDocumentResponseDto= registerDocumentService.registerDocument(file,personId);
+        LoadDocumentResponseDto loadDocumentResponseDto= registerDocumentService.registerDocument(file,personId,targetLanguage);
 
         return ResponseEntity.ok(loadDocumentResponseDto);
+    }
+    @GetMapping("/languages")
+    public ResponseEntity<LanguagesEnum[]> getLanguages() {
+        return ResponseEntity.ok(LanguagesEnum.values());
+    }
+
+    @PatchMapping("/update-name/{documentId}")
+    public ResponseEntity<LoadDocumentResponseDto> updateDocumentName(
+            @PathVariable String documentId,
+            @RequestParam String newName) {
+
+        LoadDocumentResponseDto updatedDoc = registerDocumentService.updateFileName(documentId, newName);
+
+        return ResponseEntity.ok(updatedDoc);
     }
 
     @GetMapping("/person/{personId}/summary")
