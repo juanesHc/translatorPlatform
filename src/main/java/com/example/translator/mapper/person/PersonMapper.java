@@ -3,10 +3,13 @@ package com.example.translator.mapper.person;
 import com.example.translator.dto.person.request.RegisterClassicPersonRequestDto;
 import com.example.translator.dto.person.request.RegisterGooglePersonRequestDto;
 import com.example.translator.dto.person.response.RetrieveMyDataResponseDto;
+import com.example.translator.dto.person.response.RetrievePersonResponseDto;
 import com.example.translator.entity.PersonEntity;
 import com.example.translator.entity.enums.AuthEnum;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
@@ -32,5 +35,13 @@ public interface PersonMapper {
     @Mapping(target = "documentEntities", ignore = true)
     @Mapping(target = "password", ignore = true)
     PersonEntity toEntityFromClassicRegister(RegisterClassicPersonRequestDto dto);
+
+    @Mapping(source = "id", target = "personId")
+    @Mapping(source = "role.type", target = "role")
+    @Mapping(source = "authEnum", target = "authEnum")
+    @Mapping(source = "createdAt", target = "createdAt")
+    RetrievePersonResponseDto toRetrievePersonResponseDto(PersonEntity personEntity);
+
+    List<RetrievePersonResponseDto> toRetrievePersonResponseDtos(List<PersonEntity> personEntities);
 
 }

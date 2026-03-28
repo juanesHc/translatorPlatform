@@ -2,7 +2,6 @@ package com.example.translator.services.document;
 
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
 import com.example.translator.entity.DocumentEntity;
-import com.example.translator.entity.PersonEntity;
 import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
 import com.example.translator.mapper.document.DocumentMapper;
@@ -40,7 +39,7 @@ public class RetrieveDocumentService {
 
         UUID uuid = UUID.fromString(personId);
 
-        Specification<DocumentEntity> spec = DocumentSpecification.buildUserSpecification(requestDto)
+        Specification<DocumentEntity> spec = DocumentSpecification.buildDocumentSpecification(requestDto)
                 .and((root, query, cb) -> cb.equal(root.get("person").get("id"), uuid));
 
         Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize(),

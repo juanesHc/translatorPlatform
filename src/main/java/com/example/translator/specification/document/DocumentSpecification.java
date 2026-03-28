@@ -23,7 +23,7 @@ public class DocumentSpecification {
     }
 
 
-    public static Specification<DocumentEntity> buildUserSpecification(RetrieveDocumentsRequestDto requestDto) {
+    public static Specification<DocumentEntity> buildDocumentSpecification(RetrieveDocumentsRequestDto requestDto) {
 
         Specification<DocumentEntity> spec = Specification.allOf();
 
