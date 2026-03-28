@@ -1,7 +1,10 @@
 package com.example.translator.controller.person.admin;
 
+import com.example.translator.dto.person.request.RegisterPersonWithRoleRequestDto;
 import com.example.translator.dto.person.request.RetrievePersonRequestDto;
+import com.example.translator.dto.person.response.RegisterPersonWithRoleResponseDto;
 import com.example.translator.dto.person.response.RetrievePersonPageResponseDto;
+import com.example.translator.services.person.RegisterPersonService;
 import com.example.translator.services.person.RetrievePersonByFilterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
+    private final RegisterPersonService registerPersonService;
     private final RetrievePersonByFilterService retrievePersonByFilterService;
 
     @PostMapping("/retrieve/filter")
@@ -23,4 +27,12 @@ public class AdminController {
             @RequestBody RetrievePersonRequestDto requestDto) {
         return ResponseEntity.ok(retrievePersonByFilterService.retrievePersonByFilter(requestDto));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterPersonWithRoleResponseDto> postPersonsWithRole(
+            @RequestBody RegisterPersonWithRoleRequestDto requestDto) {
+        return ResponseEntity.ok(registerPersonService.registerWithRole(requestDto));
+    }
+
+
 }

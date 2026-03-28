@@ -2,6 +2,7 @@ package com.example.translator.mapper.person;
 
 import com.example.translator.dto.person.request.RegisterClassicPersonRequestDto;
 import com.example.translator.dto.person.request.RegisterGooglePersonRequestDto;
+import com.example.translator.dto.person.request.RegisterPersonWithRoleRequestDto;
 import com.example.translator.dto.person.response.RetrieveMyDataResponseDto;
 import com.example.translator.dto.person.response.RetrievePersonResponseDto;
 import com.example.translator.entity.PersonEntity;
@@ -44,4 +45,7 @@ public interface PersonMapper {
 
     List<RetrievePersonResponseDto> toRetrievePersonResponseDtos(List<PersonEntity> personEntities);
 
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "activate", constant = "true")
+    PersonEntity registerPersonWithRoleRequestDtoToEntity(RegisterPersonWithRoleRequestDto dto);
 }
