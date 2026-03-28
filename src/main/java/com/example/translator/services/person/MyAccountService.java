@@ -3,6 +3,7 @@ package com.example.translator.services.person;
 import com.example.translator.dto.person.request.EditMyDataRequestDto;
 import com.example.translator.dto.person.response.EditMyDataResponseDto;
 import com.example.translator.dto.person.response.RetrieveMyDataResponseDto;
+import com.example.translator.dto.person.response.RetrieveStatusAccountResponseDto;
 import com.example.translator.entity.PersonEntity;
 import com.example.translator.exceptions.PersonNotFoundException;
 import com.example.translator.mapper.person.PersonMapper;
@@ -33,6 +34,23 @@ public class MyAccountService {
         }
         personRepository.save(personEntity);
         return new EditMyDataResponseDto("Update successfully");
+    }
+
+    public RetrieveStatusAccountResponseDto changeAccountStatus(String personId){
+        PersonEntity personEntity=retrievePersonEntity(personId);
+        personEntity.setActivate(!personEntity.isActivate());
+        personRepository.save(personEntity);
+
+        RetrieveStatusAccountResponseDto retrieveStatusAccountResponseDto=new RetrieveStatusAccountResponseDto();
+        retrieveStatusAccountResponseDto.setStatus(personEntity.isActivate());
+
+        if(retrieveStatusAccountResponseDto.isStatus()){
+            retrieveStatusAccountResponseDto.setMessage("Account successfully activated");
+        }
+        else {
+            retrieveStatusAccountResponseDto.setMessage("Account successfully deactivated");
+        }
+        return retrieveStatusAccountResponseDto;
     }
 
     private PersonEntity retrievePersonEntity(String personId){

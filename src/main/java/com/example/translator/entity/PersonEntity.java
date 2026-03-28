@@ -1,5 +1,6 @@
 package com.example.translator.entity;
 
+import com.example.translator.entity.enums.AuthEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,11 +27,16 @@ public class PersonEntity extends BaseEntity{
     private String familyName;
 
     @Column(nullable = false)
-    private int credits;
+    private boolean activate;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
+
+    @Enumerated(EnumType.STRING)
+    private AuthEnum authEnum;
+
+    private String password;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DocumentEntity> documentEntities;

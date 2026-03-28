@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterPersonRequestDto {
+public class RegisterGooglePersonRequestDto {
 
     private String email;
     private String familyName;

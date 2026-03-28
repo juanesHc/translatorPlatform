@@ -3,7 +3,7 @@ package com.example.translator.controller.exception;
 import com.example.translator.dto.exception.ExceptionDto;
 import com.example.translator.exceptions.DocumentProcessingException;
 import com.example.translator.exceptions.PersonNotFoundException;
-import com.example.translator.exceptions.RegisterPersonException;
+import com.example.translator.exceptions.RegisterPersonGoogleException;
 import com.example.translator.exceptions.RoleNotFoundException;
 import jakarta.transaction.TransactionalException;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionDto("It was impossible to found the according person", "PERSON_NOT_FOUND"));
     }
 
-    @ExceptionHandler(RegisterPersonException.class)
+    @ExceptionHandler(RegisterPersonGoogleException.class)
     public ResponseEntity<ExceptionDto> handleRegisterPerson(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

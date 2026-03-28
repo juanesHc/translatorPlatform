@@ -35,7 +35,7 @@ public class RegisterTranslationService {
 
         PersonEntity person = documentEntity.getPerson();
 
-        if (person.getRole().getType() == PersonRoleEnum.FREE && person.getCredits() <= 0) {
+        if (person.getRole().getType() == PersonRoleEnum.COMMON) {
             throw new RuntimeException("No credits available");
         }
 
@@ -58,10 +58,6 @@ public class RegisterTranslationService {
             translationEntity.setStatus(TranslationStatusEnum.DONE);
             translationRepository.save(translationEntity);
 
-            if (person.getRole().getType() == PersonRoleEnum.FREE) {
-                person.setCredits(person.getCredits() - 1);
-                personRepository.save(person);
-            }
 
             return new RegisterTranslationResponseDto(
                     translationEntity.getId().toString(),
