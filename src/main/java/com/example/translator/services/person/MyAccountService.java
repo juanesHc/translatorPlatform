@@ -1,5 +1,6 @@
 package com.example.translator.services.person;
 
+import com.example.translator.dto.messaging.request.SendBlockMessageRequestDto;
 import com.example.translator.dto.person.request.EditMyDataRequestDto;
 import com.example.translator.dto.person.response.EditMyDataResponseDto;
 import com.example.translator.dto.person.response.RetrieveMyDataResponseDto;
@@ -8,6 +9,7 @@ import com.example.translator.entity.PersonEntity;
 import com.example.translator.exceptions.PersonNotFoundException;
 import com.example.translator.mapper.person.PersonMapper;
 import com.example.translator.repository.PersonRepository;
+import com.example.translator.services.messaging.impl.MessagingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class MyAccountService {
 
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
+    private final MessagingService messagingService;
 
     public RetrieveMyDataResponseDto RetrieveMyData(String personId){
         return personMapper.toRetrieveMyDataResponseDto(retrievePersonEntity(personId));
@@ -54,7 +57,13 @@ public class MyAccountService {
     }
 
     public RetrieveStatusAccountResponseDto blockAccount(String personId){
+
         PersonEntity personEntity=retrievePersonEntity(personId);
+
+        messagingService.sendBlockEmail(new SendBlockMessageRequestDto(personEntity.getGivenName(),
+                personEntity.getEmail(),
+                "Your account will be block soon"));
+
         personEntity.setBlock(!personEntity.isBlock());
         personRepository.save(personEntity);
 

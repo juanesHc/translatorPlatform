@@ -1,8 +1,8 @@
 package com.example.translator.controller.messaging;
 
-import com.example.translator.dto.messaging.request.SendEmailRequestDto;
-import com.example.translator.dto.messaging.response.SendEmailResponseDto;
-import com.example.translator.services.messaging.MessagingService;
+import com.example.translator.dto.messaging.request.SendTranslationRequestDto;
+import com.example.translator.dto.messaging.response.SendTranslationResponseDto;
+import com.example.translator.services.messaging.impl.MessagingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ public class MessagingController {
     private final MessagingService messagingService;
 
     @PostMapping("/translation")
-    public ResponseEntity<SendEmailResponseDto> sendEmail(@RequestBody SendEmailRequestDto requestDto) {
+    public ResponseEntity<SendTranslationResponseDto> sendEmail(@RequestBody SendTranslationRequestDto requestDto) {
         return ResponseEntity.ok(messagingService.sendTranslationByEmail(requestDto));
     }
 

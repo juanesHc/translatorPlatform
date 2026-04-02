@@ -7,14 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SendEmailRequestDto {
-    private String translationId;
-    private String senderEmail;
-    private String recipientEmail;
-    private String subject;
+@NoArgsConstructor
+public class SendWelcomeMessageRequestDto {
+    private String personName;
+    private String personEmail;
     private String message;
-
-
 }
