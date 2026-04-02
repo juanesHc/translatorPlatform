@@ -38,7 +38,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
-	//implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'com.google.api-client:google-api-client:2.2.0'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -52,14 +52,11 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-tika-document-reader'
 	implementation 'com.itextpdf:itext7-core:7.2.5'
 
-	implementation 'com.notificationapi:notificationapi-java-server-sdk:0.3.0'
+
 	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
-	implementation 'com.mercadopago:sdk-java:2.1.29'
-
-
-
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
