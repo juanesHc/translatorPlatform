@@ -35,7 +35,8 @@ public class JwtService {
                             boolean activate,
                             String email,
                             String givenName,
-                            String role    ){
+                            String role,
+                                boolean verify){
         Map<String, Object> claims=new HashMap<>();
         claims.put("personId",personId);
         claims.put("block",block);
@@ -43,6 +44,7 @@ public class JwtService {
         claims.put("email",email);
         claims.put("givenName",givenName);
         claims.put("role",role);
+        claims.put("verify",verify);
         return buildToken(claims,userDetails.getUsername());
     }
 

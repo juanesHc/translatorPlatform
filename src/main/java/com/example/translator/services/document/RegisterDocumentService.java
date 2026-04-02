@@ -9,6 +9,7 @@ import com.example.translator.mapper.document.DocumentMapper;
 import com.example.translator.repository.DocumentRepository;
 import com.example.translator.repository.PersonRepository;
 import com.example.translator.services.translation.RegisterTranslationService;
+import jakarta.transaction.Transactional;
 import jakarta.transaction.TransactionalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,10 +47,10 @@ public class RegisterDocumentService {
     }
 
     private Boolean validateNewName(String name){
-        String newName=name.trim();
-        return newName!=null;
+        return name != null && !name.trim().isEmpty();
     }
 
+    @Transactional
     public LoadDocumentResponseDto registerDocument(MultipartFile file,String personId,String targetLanguage){
         PersonEntity personEntity = personRepository.findById(UUID.fromString(personId))
                 .orElseThrow(()->new PersonNotFoundException("Couldnt found respective person"));
@@ -93,9 +94,9 @@ public class RegisterDocumentService {
 
         try{
             registerTranslationService.translate(String.valueOf(documentSaved.getId()),translationRequestDto);
-        } catch (TransactionalException e) {
-            log.error("It run into a problem trying to translate the document",e);
-            throw new TranslationException("It run into a problem trying to translate the document");
+        } catch (Exception e) {
+            log.error("Error traduciendo el documento: {}", e.getMessage(), e);
+            throw new TranslationException("Error traduciendo: " + e.getMessage());
         }
 
         return documentMapper.toLoadDto(documentSaved);

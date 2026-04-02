@@ -53,7 +53,8 @@ public class LoginService {
                     personEntity.isActivate(),
                     personEntity.getEmail(),
                     personEntity.getGivenName(),
-                    String.valueOf(roleEntity.getType())
+                    String.valueOf(roleEntity.getType()),
+                    personEntity.isVerify()
 
             ));
             return authResponseDto;

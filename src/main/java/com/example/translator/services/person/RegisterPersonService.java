@@ -38,7 +38,7 @@ public class RegisterPersonService {
         null,null,
                 PersonRoleEnum.COMMON,
                 AuthEnum.CLASSIC);
-
+        personEntity.setVerify(true);
         personRepository.save(personToSave);
 
         return new RegisterGooglePersonResponseDto("Successfully register");
@@ -53,6 +53,7 @@ public class RegisterPersonService {
                 PersonRoleEnum.COMMON,
                 AuthEnum.CLASSIC);
 
+        personEntity.setVerify(false);
         personRepository.save(personToSave);
 
         personRepository.save(personEntity);
@@ -68,6 +69,7 @@ try{
                 PersonRoleEnum.valueOf(registerPersonWithRoleRequestDto.getRole()),
                 AuthEnum.CLASSIC);
 
+            personEntity.setVerify(false);
             personRepository.save(personToSave);
 }catch (RegisterPersonClassicException registerPersonClassicException){
     log.error("It run into a issue doing the register",registerPersonClassicException);
