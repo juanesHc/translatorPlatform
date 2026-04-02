@@ -16,9 +16,11 @@ import com.example.translator.mapper.person.PersonMapper;
 import com.example.translator.repository.PersonRepository;
 import com.example.translator.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RegisterPersonService {
@@ -59,7 +61,7 @@ public class RegisterPersonService {
 
     public RegisterPersonWithRoleResponseDto registerWithRole(RegisterPersonWithRoleRequestDto registerPersonWithRoleRequestDto){
         PersonEntity personEntity=personMapper.registerPersonWithRoleRequestDtoToEntity(registerPersonWithRoleRequestDto);
-
+try{
         PersonEntity personToSave=summarySavePersonEntity(personEntity,
                 registerPersonWithRoleRequestDto.getPassword(),
                 registerPersonWithRoleRequestDto.getConfirmPassword(),
@@ -67,6 +69,10 @@ public class RegisterPersonService {
                 AuthEnum.CLASSIC);
 
             personRepository.save(personToSave);
+}catch (RegisterPersonClassicException registerPersonClassicException){
+    log.error("It run into a issue doing the register",registerPersonClassicException);
+    throw new RegisterPersonClassicException("It run into a issue doing the register");
+}
             return new RegisterPersonWithRoleResponseDto("User successfully added");
     }
 

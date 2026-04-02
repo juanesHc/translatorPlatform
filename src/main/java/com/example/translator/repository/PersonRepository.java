@@ -9,4 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface PersonRepository extends JpaRepository<PersonEntity, UUID> , JpaSpecificationExecutor<PersonEntity> {
+
+    PersonEntity findByEmail(String email);
+
 }

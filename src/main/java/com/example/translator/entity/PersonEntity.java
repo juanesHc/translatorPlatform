@@ -29,6 +29,9 @@ public class PersonEntity extends BaseEntity{
     @Column(nullable = false)
     private boolean activate;
 
+    @Column(nullable = false)
+    private boolean block;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;

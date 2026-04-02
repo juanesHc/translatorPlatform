@@ -19,5 +19,6 @@ public class RetrievePersonResponseDto {
     private String role;
     private String authEnum;
     private boolean activate;
+    private boolean block;
     private LocalDateTime createdAt;
 }

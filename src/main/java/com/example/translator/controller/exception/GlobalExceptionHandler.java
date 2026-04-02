@@ -1,10 +1,7 @@
 package com.example.translator.controller.exception;
 
 import com.example.translator.dto.exception.ExceptionDto;
-import com.example.translator.exceptions.DocumentProcessingException;
-import com.example.translator.exceptions.PersonNotFoundException;
-import com.example.translator.exceptions.RegisterPersonGoogleException;
-import com.example.translator.exceptions.RoleNotFoundException;
+import com.example.translator.exceptions.*;
 import jakarta.transaction.TransactionalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +53,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ExceptionDto("It was impossible to found the according role", "ROLE_NOT_FOUND"));
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<ExceptionDto> handleLogin(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionDto("It was impossible to do login", "LOGIN_FAILED"));
     }
 
     @ExceptionHandler(TransactionalException.class)

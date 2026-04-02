@@ -21,6 +21,7 @@ public interface PersonMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "documentEntities", ignore = true)
+    @Mapping(target = "block", ignore = true)
     PersonEntity RegisterPersonGoogleRequestDtoToPersonEntity(RegisterGooglePersonRequestDto dto);
 
     @Mapping(source = "givenName", target = "firstName")
@@ -35,17 +36,20 @@ public interface PersonMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "documentEntities", ignore = true)
     @Mapping(target = "password", ignore = true)
+    @Mapping(target = "block", ignore = true)
     PersonEntity toEntityFromClassicRegister(RegisterClassicPersonRequestDto dto);
 
     @Mapping(source = "id", target = "personId")
     @Mapping(source = "role.type", target = "role")
     @Mapping(source = "authEnum", target = "authEnum")
     @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "block", target = "block")
     RetrievePersonResponseDto toRetrievePersonResponseDto(PersonEntity personEntity);
 
     List<RetrievePersonResponseDto> toRetrievePersonResponseDtos(List<PersonEntity> personEntities);
 
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "activate", constant = "true")
+    @Mapping(target = "block", ignore = true)
     PersonEntity registerPersonWithRoleRequestDtoToEntity(RegisterPersonWithRoleRequestDto dto);
 }

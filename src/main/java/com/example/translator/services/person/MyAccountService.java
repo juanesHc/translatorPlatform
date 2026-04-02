@@ -53,6 +53,23 @@ public class MyAccountService {
         return retrieveStatusAccountResponseDto;
     }
 
+    public RetrieveStatusAccountResponseDto blockAccount(String personId){
+        PersonEntity personEntity=retrievePersonEntity(personId);
+        personEntity.setBlock(!personEntity.isBlock());
+        personRepository.save(personEntity);
+
+        RetrieveStatusAccountResponseDto retrieveStatusAccountResponseDto=new RetrieveStatusAccountResponseDto();
+        retrieveStatusAccountResponseDto.setStatus(personEntity.isActivate());
+
+        if(retrieveStatusAccountResponseDto.isStatus()){
+            retrieveStatusAccountResponseDto.setMessage("Account successfully unblocked");
+        }
+        else {
+            retrieveStatusAccountResponseDto.setMessage("Account successfully blocked");
+        }
+        return retrieveStatusAccountResponseDto;
+    }
+
     private PersonEntity retrievePersonEntity(String personId){
        return personRepository.findById(UUID.fromString(personId))
                 .orElseThrow(()->new PersonNotFoundException("Couldnt found the person"));
