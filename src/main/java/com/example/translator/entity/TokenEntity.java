@@ -20,7 +20,7 @@ public class TokenEntity extends BaseEntity{
     private LocalDateTime expiredAt;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="person_id")
     private PersonEntity person;
 
     @Enumerated(EnumType.STRING)

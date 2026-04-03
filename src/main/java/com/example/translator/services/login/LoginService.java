@@ -11,6 +11,7 @@ import com.example.translator.repository.RoleRepository;
 import com.example.translator.services.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,10 +41,14 @@ public class LoginService {
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
             PersonEntity personEntity = personRepository.findByEmail(loginRequestDto.getEmail());
-            RoleEntity roleEntity=roleRepository.findById(personEntity.getRole().getId()).
-                    orElseThrow(()->new RoleNotFoundException("Couldnt found role"));
+
+            if (personEntity.isBlock()) {
+                throw new LoginException("ACCOUNT_BLOCKED");
+            }
+
+            RoleEntity roleEntity = roleRepository.findById(personEntity.getRole().getId())
+                    .orElseThrow(() -> new RoleNotFoundException("Couldnt found role"));
 
             LoginResponseDto authResponseDto = new LoginResponseDto();
             authResponseDto.setToken(jwtService.generateToken(
@@ -55,13 +60,19 @@ public class LoginService {
                     personEntity.getGivenName(),
                     String.valueOf(roleEntity.getType()),
                     personEntity.isVerify()
-
             ));
             return authResponseDto;
 
+        } catch (DisabledException e) {
+            // ✅ Spring lanza esto cuando isEnabled() == false
+            log.warn("Intento de login con cuenta desactivada: {}", loginRequestDto.getEmail());
+            throw new LoginException("ACCOUNT_DELETED");
+        } catch (LoginException e) {
+            throw e;
         } catch (Exception e) {
-            log.error("Login run into a issue: ", e);
-            throw new LoginException("Credenciales inválidas");
+            log.error("Tipo de excepción: {}", e.getClass().getName());
+            log.error("Login failed: {}", e.getMessage(), e);
+            throw new LoginException("It was impossible to do login");
         }
     }
 }

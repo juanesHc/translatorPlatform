@@ -47,6 +47,20 @@ public class ConstMail {
                 """.formatted(senderEmail, messageSection);
     }
 
+    public String buildHtmlAccountRecovery(String name, String recoveryUrl) {
+        String content = "<p style='color:#1a2744;font-size:16px;font-weight:bold;'>Recupera tu cuenta, " + name + "</p>" +
+                "<p style='color:#666;font-size:14px;'>Recibimos una solicitud para reactivar tu cuenta en TranslatorPlatform. " +
+                "Si fuiste tú, haz clic en el botón para recuperarla.</p>" +
+                "<div style='text-align:center;margin:32px 0;'>" +
+                "<a href='" + recoveryUrl + "' " +
+                "style='background:#f5c542;color:#1a2744;padding:14px 32px;border-radius:8px;" +
+                "text-decoration:none;font-weight:bold;font-size:15px;'>Recuperar mi cuenta</a>" +
+                "</div>" +
+                "<p style='color:#aaa;font-size:12px;'>Si no solicitaste esto, ignora este correo. " +
+                "Tu cuenta permanecerá desactivada.</p>";
+        return buildBaseTemplate("Recupera tu cuenta", content);
+    }
+
     private String buildBaseTemplate(String title, String content) {
         return """
                 <div style='font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f5f5f5;'>

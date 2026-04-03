@@ -1,33 +1,35 @@
 package com.example.translator.services.security.token.impl;
 
-import com.example.translator.dto.token.TokenDto;
-import com.example.translator.entity.TokenEntity;
 import com.example.translator.entity.enums.TokenTypeEnum;
-import com.example.translator.services.security.token.Token;
+import com.example.translator.repository.TokenRepository;
+import com.example.translator.services.security.token.AbstractTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @RequiredArgsConstructor
-public class TokenService implements Token {
-    @Override
-    public TokenEntity createToken(TokenTypeEnum tokenType) {
-        return null;
-    }
+public class TokenService extends AbstractTokenService {
+    @Value("${token.email.validity}")
+    private long emailValidity;
+
+    @Value("${token.password.validity}")
+    private long passwordValidity;
+
+    @Value("${token.activation.validity}")
+    private long activationValidity;
+
+    private final TokenRepository tokenRepository;
 
     @Override
-    public void saveSecureToken(TokenEntity secureToken) {
-
-    }
+    protected TokenRepository getRepository() { return tokenRepository; }
 
     @Override
-    public void removeToken(TokenEntity secureToken) {
-
-    }
-
-    @Override
-    public TokenEntity validateToken(TokenDto tokenDto) {
-        return null;
+    protected long getExpirationSeconds(TokenTypeEnum type) {
+        return switch (type) {
+            case VERIFY_EMAIL    -> emailValidity;
+            case PASSWORD_RESET  -> passwordValidity;
+            case ACCOUNT_RECOVERY -> activationValidity;
+        };
     }
 }

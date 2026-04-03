@@ -38,7 +38,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !personEntity.isBlock();
     }
 
     @Override
@@ -48,6 +48,6 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return personEntity.isActivate();
     }
 }

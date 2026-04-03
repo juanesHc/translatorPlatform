@@ -9,7 +9,7 @@ public interface Messaging {
 
     SendVerificationResponseDto sendVerificationEmail(SendVerificationRequestDto sendVerificationRequestDto);
 
-    SendActivationResponseDto sendActivationEmail(SendActivationRequestDto sendActivationRequestDto);
+    SendActivationResponseDto sendAccountRecoveryMessage(SendActivationRequestDto sendActivationRequestDto);
 
     SendWelcomeMessageResponseDto sendWelcomeEmail(SendWelcomeMessageRequestDto sendWelcomeMessageRequestDto);
 

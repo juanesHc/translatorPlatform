@@ -73,8 +73,30 @@ public class MessagingService implements Messaging {
     }
 
     @Override
-    public SendActivationResponseDto sendActivationEmail(SendActivationRequestDto sendActivationRequestDto) {
-        return null;
+    public SendActivationResponseDto sendAccountRecoveryMessage(SendActivationRequestDto sendActivationRequestDto) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(sendActivationRequestDto.getPersonEntity().getEmail());
+            helper.setSubject("Recupera tu cuenta en TranslatorPlatform");
+
+            String htmlBody = constMail.buildHtmlAccountRecovery(
+                    sendActivationRequestDto.getPersonEntity().getGivenName(),
+                    sendActivationRequestDto.getUrl()
+            );
+            helper.setText(htmlBody, true);
+            mailSender.send(message);
+
+            log.info("Email de recuperación enviado a {}",
+                    sendActivationRequestDto.getPersonEntity().getEmail());
+
+            return new SendActivationResponseDto("Email de recuperación enviado exitosamente");
+
+        } catch (Exception e) {
+            log.error("Error al enviar email de recuperación: {}", e.getMessage());
+            return new SendActivationResponseDto("Error al enviar email: " + e.getMessage());
+        }
     }
 
     @Override
