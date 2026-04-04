@@ -16,4 +16,5 @@ public interface Messaging {
     SendBlockMessageResponseDto sendBlockEmail(SendBlockMessageRequestDto sendBlockMessageRequestDto);
 
 
+
 }

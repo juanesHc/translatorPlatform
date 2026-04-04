@@ -119,6 +119,13 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionDto(ex.getMessage(), "ACCOUNT_RECOVERY_FAILED"));
     }
 
+    @ExceptionHandler(ForgotPasswordException.class)
+    public ResponseEntity<ExceptionDto> handleForgotPassword(ForgotPasswordException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionDto(ex.getMessage(), "FORGOT_PASSWORD_FAILED"));
+    }
+
     // Genérico — siempre al final
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDto> handleGeneric(Exception ex) {

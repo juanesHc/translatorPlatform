@@ -74,6 +74,20 @@ public class ConstMail {
         return buildBaseTemplate("Verifica tu correo", content);
     }
 
+    public String buildHtmlForgotPassword(String name, String resetUrl) {
+        String content = "<p style='color:#1a2744;font-size:16px;font-weight:bold;'>Restablece tu contraseña, " + name + "</p>" +
+                "<p style='color:#666;font-size:14px;'>Recibimos una solicitud para restablecer la contraseña de tu cuenta. " +
+                "Si fuiste tú, haz clic en el botón.</p>" +
+                "<div style='text-align:center;margin:32px 0;'>" +
+                "<a href='" + resetUrl + "' " +
+                "style='background:#f5c542;color:#1a2744;padding:14px 32px;border-radius:8px;" +
+                "text-decoration:none;font-weight:bold;font-size:15px;'>Restablecer contraseña</a>" +
+                "</div>" +
+                "<p style='color:#aaa;font-size:12px;'>Si no solicitaste esto, ignora este correo. " +
+                "Tu contraseña no será cambiada.</p>";
+        return buildBaseTemplate("Restablece tu contraseña", content);
+    }
+
     private String buildBaseTemplate(String title, String content) {
         return """
                 <div style='font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f5f5f5;'>
