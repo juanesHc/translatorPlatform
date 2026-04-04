@@ -47,6 +47,10 @@ public class LoginService {
                 throw new LoginException("ACCOUNT_BLOCKED");
             }
 
+            if (!personEntity.isVerify()) {
+                throw new LoginException("ACCOUNT_UNVERIFIED");
+            }
+
             RoleEntity roleEntity = roleRepository.findById(personEntity.getRole().getId())
                     .orElseThrow(() -> new RoleNotFoundException("Couldnt found role"));
 
@@ -64,7 +68,6 @@ public class LoginService {
             return authResponseDto;
 
         } catch (DisabledException e) {
-            // ✅ Spring lanza esto cuando isEnabled() == false
             log.warn("Intento de login con cuenta desactivada: {}", loginRequestDto.getEmail());
             throw new LoginException("ACCOUNT_DELETED");
         } catch (LoginException e) {

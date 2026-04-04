@@ -1,5 +1,6 @@
 package com.example.translator.services.person;
 
+import com.example.translator.dto.messaging.request.SendVerificationRequestDto;
 import com.example.translator.dto.person.request.RegisterClassicPersonRequestDto;
 import com.example.translator.dto.person.request.RegisterPersonWithRoleRequestDto;
 import com.example.translator.dto.person.response.RegisterClassicPersonResponseDto;
@@ -15,6 +16,7 @@ import com.example.translator.exceptions.RoleNotFoundException;
 import com.example.translator.mapper.person.PersonMapper;
 import com.example.translator.repository.PersonRepository;
 import com.example.translator.repository.RoleRepository;
+import com.example.translator.services.messaging.impl.MessagingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +31,7 @@ public class RegisterPersonService {
     private final PersonRepository personRepository;
     private final RoleRepository roleRepository;
     private final PersonMapper personMapper;
+    private final MessagingService messagingService;
 
 
     public RegisterGooglePersonResponseDto registerGooglePerson(RegisterGooglePersonRequestDto registerGooglePersonRequestDto){
@@ -44,38 +47,52 @@ public class RegisterPersonService {
         return new RegisterGooglePersonResponseDto("Successfully register");
     }
 
-    public RegisterClassicPersonResponseDto registerClassicPerson(RegisterClassicPersonRequestDto registerClassicPersonRequestDto){
+    public RegisterClassicPersonResponseDto registerClassicPerson(
+            RegisterClassicPersonRequestDto registerClassicPersonRequestDto) {
 
-        PersonEntity personEntity=personMapper.toEntityFromClassicRegister(registerClassicPersonRequestDto);
-        PersonEntity personToSave=summarySavePersonEntity(personEntity,
+        PersonEntity personEntity = personMapper.toEntityFromClassicRegister(registerClassicPersonRequestDto);
+        PersonEntity personToSave = summarySavePersonEntity(
+                personEntity,
                 registerClassicPersonRequestDto.getPassword(),
                 registerClassicPersonRequestDto.getConfirmPassword(),
                 PersonRoleEnum.COMMON,
                 AuthEnum.CLASSIC);
 
-        personEntity.setVerify(false);
-        personRepository.save(personToSave);
+        personToSave.setVerify(false);
+        PersonEntity savedPerson = personRepository.save(personToSave);
 
-        personRepository.save(personEntity);
+        SendVerificationRequestDto dto = new SendVerificationRequestDto();
+        dto.setEmail(savedPerson.getEmail());
+        messagingService.sendVerificationEmail(dto);
+
         return new RegisterClassicPersonResponseDto("User register in a successfully way");
     }
 
-    public RegisterPersonWithRoleResponseDto registerWithRole(RegisterPersonWithRoleRequestDto registerPersonWithRoleRequestDto){
-        PersonEntity personEntity=personMapper.registerPersonWithRoleRequestDtoToEntity(registerPersonWithRoleRequestDto);
-try{
-        PersonEntity personToSave=summarySavePersonEntity(personEntity,
-                registerPersonWithRoleRequestDto.getPassword(),
-                registerPersonWithRoleRequestDto.getConfirmPassword(),
-                PersonRoleEnum.valueOf(registerPersonWithRoleRequestDto.getRole()),
-                AuthEnum.CLASSIC);
+    public RegisterPersonWithRoleResponseDto registerWithRole(
+            RegisterPersonWithRoleRequestDto registerPersonWithRoleRequestDto) {
+        try {
+            PersonEntity personEntity = personMapper.registerPersonWithRoleRequestDtoToEntity(
+                    registerPersonWithRoleRequestDto);
+            PersonEntity personToSave = summarySavePersonEntity(
+                    personEntity,
+                    registerPersonWithRoleRequestDto.getPassword(),
+                    registerPersonWithRoleRequestDto.getConfirmPassword(),
+                    PersonRoleEnum.valueOf(registerPersonWithRoleRequestDto.getRole()),
+                    AuthEnum.CLASSIC);
 
-            personEntity.setVerify(false);
-            personRepository.save(personToSave);
-}catch (RegisterPersonClassicException registerPersonClassicException){
-    log.error("It run into a issue doing the register",registerPersonClassicException);
-    throw new RegisterPersonClassicException("It run into a issue doing the register");
-}
-            return new RegisterPersonWithRoleResponseDto("User successfully added");
+            personToSave.setVerify(false);
+            PersonEntity savedPerson = personRepository.save(personToSave);
+
+            SendVerificationRequestDto dto = new SendVerificationRequestDto();
+            dto.setEmail(savedPerson.getEmail());
+            messagingService.sendVerificationEmail(dto);
+
+        } catch (RegisterPersonClassicException e) {
+            log.error("It run into a issue doing the register", e);
+            throw new RegisterPersonClassicException("It run into a issue doing the register");
+        }
+
+        return new RegisterPersonWithRoleResponseDto("User successfully added");
     }
 
     private Boolean validatePassword(String password,String confirmPassword){

@@ -3,11 +3,15 @@ package com.example.translator.services.messaging.impl;
 import com.example.translator.dto.messaging.request.*;
 import com.example.translator.dto.messaging.response.*;
 import com.example.translator.entity.PersonEntity;
+import com.example.translator.entity.TokenEntity;
 import com.example.translator.entity.TranslationEntity;
+import com.example.translator.entity.enums.TokenTypeEnum;
 import com.example.translator.exceptions.PersonNotFoundException;
 import com.example.translator.repository.PersonRepository;
 import com.example.translator.repository.TranslationRepository;
 import com.example.translator.services.messaging.Messaging;
+import com.example.translator.services.security.token.email.VerifyEmailService;
+import com.example.translator.services.security.token.impl.TokenService;
 import com.example.translator.services.translation.GenerateDocument;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,11 +30,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessagingService implements Messaging {
 
+    @Value("${app.base-url}")
+    private String appBaseUrl;
+
     private final JavaMailSender mailSender;
     private final TranslationRepository translationRepository;
     private final PersonRepository personRepository;
     private final GenerateDocument generateDocument;
     private final ConstMail constMail;
+    private final TokenService tokenService;
 
     @Value("${spring.mail.username}")
     private String defaultSender;
@@ -69,9 +77,34 @@ public class MessagingService implements Messaging {
 
     @Override
     public SendVerificationResponseDto sendVerificationEmail(SendVerificationRequestDto sendVerificationRequestDto) {
-        return null;
-    }
+        try {
+            PersonEntity person = personRepository.findByEmail(sendVerificationRequestDto.getEmail());
 
+            if (person.isVerify()) {
+                return new SendVerificationResponseDto("La cuenta ya está verificada");
+            }
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(person.getEmail());
+            helper.setSubject("Verifica tu correo en TranslatorPlatform");
+
+            String verifyUrl = generateVerifyUrl(person);
+            String htmlBody = constMail.buildHtmlVerifyEmail(person.getGivenName(), verifyUrl);
+            helper.setText(htmlBody, true);
+            mailSender.send(message);
+
+            log.info("Email de verificación enviado a {}", person.getEmail());
+            return new SendVerificationResponseDto("Email de verificación enviado exitosamente");
+
+        } catch (PersonNotFoundException e) {
+            throw e;
+         } catch (Exception e) {
+        log.error("Error enviando email de verificación: {}", e.getMessage(), e);
+        throw new RuntimeException("Error al enviar email: " + e.getMessage());
+    }
+    }
     @Override
     public SendActivationResponseDto sendAccountRecoveryMessage(SendActivationRequestDto sendActivationRequestDto) {
         try {
@@ -138,6 +171,13 @@ public class MessagingService implements Messaging {
         } catch (Exception e) {
             return new SendBlockMessageResponseDto("Error al notificar bloqueo: " + e.getMessage());
         }
+    }
+
+    private String generateVerifyUrl(PersonEntity person) {
+        TokenEntity token = tokenService.createToken(TokenTypeEnum.VERIFY_EMAIL);
+        token.setPerson(person);
+        tokenService.saveToken(token);
+        return appBaseUrl + "/verify?token=" + token.getToken();
     }
 
 }

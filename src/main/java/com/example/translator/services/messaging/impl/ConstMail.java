@@ -61,6 +61,19 @@ public class ConstMail {
         return buildBaseTemplate("Recupera tu cuenta", content);
     }
 
+    public String buildHtmlVerifyEmail(String name, String verifyUrl) {
+        String content = "<p style='color:#1a2744;font-size:16px;font-weight:bold;'>Verifica tu correo, " + name + "</p>" +
+                "<p style='color:#666;font-size:14px;'>Gracias por registrarte en TranslatorPlatform. " +
+                "Para activar tu cuenta haz clic en el botón.</p>" +
+                "<div style='text-align:center;margin:32px 0;'>" +
+                "<a href='" + verifyUrl + "' " +
+                "style='background:#f5c542;color:#1a2744;padding:14px 32px;border-radius:8px;" +
+                "text-decoration:none;font-weight:bold;font-size:15px;'>Verificar mi correo</a>" +
+                "</div>" +
+                "<p style='color:#aaa;font-size:12px;'>Si no creaste esta cuenta, ignora este correo.</p>";
+        return buildBaseTemplate("Verifica tu correo", content);
+    }
+
     private String buildBaseTemplate(String title, String content) {
         return """
                 <div style='font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f5f5f5;'>
