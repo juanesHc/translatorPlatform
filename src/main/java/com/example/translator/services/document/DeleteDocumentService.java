@@ -1,6 +1,6 @@
 package com.example.translator.services.document;
 
-import com.example.translator.db.entity.DocumentEntity;
+import com.example.translator.entity.DocumentEntity;
 import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.exceptions.DocumentNotFoundException;
 import com.example.translator.repository.DocumentRepository;

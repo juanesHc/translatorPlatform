@@ -1,12 +1,15 @@
 package com.example.translator.controller.document;
 
+import com.example.translator.dto.document.request.RetrieveDocumentsRequestDto;
 import com.example.translator.dto.document.response.DeleteDocumentResponseDto;
 import com.example.translator.dto.document.response.LoadDocumentResponseDto;
-import com.example.translator.dto.document.response.RetrieveDocumentsResponseDto;
+import com.example.translator.dto.document.response.RetrieveDocumentsPageResponseDto;
+import com.example.translator.entity.enums.LanguagesEnum;
 import com.example.translator.services.document.DeleteDocumentService;
 import com.example.translator.services.document.RegisterDocumentService;
-import com.example.translator.services.document.RetrieveAllDocumentService;
+import com.example.translator.services.document.RetrieveDocumentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,28 +23,60 @@ import java.util.List;
 public class DocumentController {
 
     private final RegisterDocumentService registerDocumentService;
-    private final RetrieveAllDocumentService retrieveAllDocumentService;
+    private final RetrieveDocumentService retrieveDocumentService;
     private final DeleteDocumentService deleteDocumentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/load/{personId}")
-    public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<LoadDocumentResponseDto> postDocument(@PathVariable String personId,
+                                                                @RequestParam("file") MultipartFile file,
+                                                                @RequestParam("targetLanguage") String targetLanguage){
 
-        LoadDocumentResponseDto loadDocumentResponseDto= registerDocumentService.registerDocument(file,personId);
+        LoadDocumentResponseDto loadDocumentResponseDto= registerDocumentService.registerDocument(file,personId,targetLanguage);
 
         return ResponseEntity.ok(loadDocumentResponseDto);
     }
+    @GetMapping("/languages")
+    public ResponseEntity<LanguagesEnum[]> getLanguages() {
+        return ResponseEntity.ok(LanguagesEnum.values());
+    }
+
+    @PatchMapping("/update-name/{documentId}")
+    public ResponseEntity<LoadDocumentResponseDto> updateDocumentName(
+            @PathVariable String documentId,
+            @RequestParam String newName) {
+
+        LoadDocumentResponseDto updatedDoc = registerDocumentService.updateFileName(documentId, newName);
+
+        return ResponseEntity.ok(updatedDoc);
+    }
+
+    @GetMapping("/person/{personId}/summary")
+    public ResponseEntity<List<LoadDocumentResponseDto>> getDocumentSummaries(@PathVariable String personId) {
+        return ResponseEntity.ok(retrieveDocumentService.findDocumentForPerson(personId));
+    }
 
     @GetMapping("/retrieve/{personId}")
-    public ResponseEntity<List<RetrieveDocumentsResponseDto>> getOriginalDocuments(@PathVariable String personId){
+    public ResponseEntity<RetrieveDocumentsPageResponseDto> getDocuments(
+            @PathVariable String personId,
+            @ModelAttribute RetrieveDocumentsRequestDto requestDto) {
 
-        List<RetrieveDocumentsResponseDto> retrieveDocumentsResponseDto= retrieveAllDocumentService.retrieveMyDocuments(personId);
-
-        return ResponseEntity.ok(retrieveDocumentsResponseDto);
+        return ResponseEntity.ok(retrieveDocumentService.getDocumentsByPerson(personId, requestDto));
     }
 
     @DeleteMapping("/delete/{documentId}")
     public ResponseEntity<DeleteDocumentResponseDto> deleteOriginalDocument(@PathVariable String documentId){
         return ResponseEntity.ok(deleteDocumentService.deleteDocument(documentId));
+    }
+
+    @GetMapping("/{documentId}/download")
+    public ResponseEntity<byte[]> downloadDocument(@PathVariable String documentId) {
+        byte[] pdfBytes = retrieveDocumentService.downloadDocument(documentId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"original_document.pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
 
 
